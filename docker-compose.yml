@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  loyalty-postgres:
+    image: postgres:latest
+    container_name: loyalty-postgres
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5902:5432
+    networks:
+      - loyalty-network
+
+  loyalty-redis:
+    image: redis:latest
+    container_name: loyalty-redis
+    environment:
+      SERVICE_TAGS: dev
+      SERVICE_NAME: redis
+    ports:
+      - 5903:6379
+    networks:
+      - loyalty-network
+
+  loyalty-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: loyalty-network
+    container_name: loyalty-api
+    working_dir: /var/www/
+    ports:
+      - 5905:9000
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - loyalty-postgres
+      - loyalty-redis
+    networks:
+      - loyalty-network
+
+  loyalty-nginx:
+    image: nginx:alpine
+    container_name: loyalty-nginx
+    ports:
+      - 5901:443
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    depends_on:
+      - loyalty-api
+    networks:
+      - loyalty-network
+
+networks:
+  loyalty-network:
+    driver: bridge

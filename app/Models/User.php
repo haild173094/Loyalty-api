@@ -111,4 +111,56 @@ class User extends Authenticatable implements IShopModel
         'pre_launch_enabled' => 'boolean',
         'enabled_presentment_currencies' => 'array',
     ];
+
+    /**
+     * Products belongs to this user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Request graphql to Shopify
+     *
+     * @param $query
+     * @param array $variables
+     * @param int $tries
+     * @return array|\GuzzleHttp\Promise\Promise
+     * @throws ShopifyGraphqlException
+     */
+    public function graph($query, array $variables = [], $tries = 0)
+    {
+        $max_tries = config('shopify-app.graphql_max_tries', 3);
+        $response = $this->api()->graph($query, $variables);
+        $body = Arr::get($response, 'body');
+
+        $container = data_get($body, 'data.container');
+        $first_key = array_key_first((array) $container);
+        $user_errors = data_get($container, $first_key . '.userErrors');
+
+        if ($user_errors) {
+            throw new \Exception($user_errors);
+        }
+
+        $errors = Arr::get($body, 'errors');
+
+        if ($errors) {
+            if (count($errors) === 1) {
+                $error_code = data_get($errors, '0.extensions.code');
+
+                if ($error_code === 'THROTTLED' && $tries < $max_tries) {
+                    sleep(1);
+
+                    return $this->graph($query, $variables, $tries + 1);
+                }
+            }
+
+            throw new \Exception($errors);
+        }
+
+        return $response;
+    }
 }

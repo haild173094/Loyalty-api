@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::namespace('API')->name('api.')->group(function () {
     Route::middleware(['verify.shopify'])->group(function () {
         Route::prefix('user')->group(function () {
-            // Route::get('/', [UserController::class, 'get']);
+            Route::get('/', [UserController::class, 'show'])->name('user.show');
         });
         Route::prefix('products')->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('products.index');

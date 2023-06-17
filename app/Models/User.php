@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Exceptions\ShopifyGraphqlException;
+use App\Exceptions\ShopifyGraphqlUserError;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -142,7 +144,7 @@ class User extends Authenticatable implements IShopModel
         $user_errors = data_get($container, $first_key . '.userErrors');
 
         if ($user_errors) {
-            throw new \Exception($user_errors);
+            throw new ShopifyGraphqlUserError($user_errors);
         }
 
         $errors = Arr::get($body, 'errors');
@@ -158,7 +160,7 @@ class User extends Authenticatable implements IShopModel
                 }
             }
 
-            throw new \Exception($errors);
+            throw new ShopifyGraphqlException($errors);
         }
 
         return $response;

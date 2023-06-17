@@ -125,6 +125,24 @@ class User extends Authenticatable implements IShopModel
     }
 
     /**
+     * Orders
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Customers
+     */
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    /**
      * Request graphql to Shopify
      *
      * @param $query

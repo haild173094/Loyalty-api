@@ -10,10 +10,16 @@
 
 <body>
     <div id="app"></div>
-    <script type="text/plain" id="shop_key">{{ config('shopify-app.api_key') }}</script>
-    <script type="text/plain" id="shop_name">{{ Request::input('shop') }}</script>
-    <script type="text/plain" id="host">{{ Request::input('host') }}</script>
-    <script> console.log(window.location)</script>
+    <script>
+        window.qikifyEmbeddedData = {
+            key: "{{ config('shopify-app.api_key') }}",
+            host: "{{$host}}",
+            shop: "{{$shop}}",
+            path: "{{$path}}",
+            query: {{ Js::from($query) }},
+            user: {{ Js::from($user) }},
+        }
+    </script>
     @env('local')
         <script type="module" src="{{ config('app.portal_url') }}/src/main.ts"></script>
     @endenv

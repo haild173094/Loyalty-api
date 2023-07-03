@@ -2,17 +2,17 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ProductStatus;
+use App\Enums\CollectionStatus;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductIndexRequest extends FormRequest
+class CollectionIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -34,7 +34,7 @@ class ProductIndexRequest extends FormRequest
             ],
             'status' => [
                 'nullable',
-                new Enum(ProductStatus::class),
+                new Enum(CollectionStatus::class),
             ],
             'page' => 'string|nullable',
             'limit' => 'integer|nullable',

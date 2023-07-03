@@ -125,6 +125,14 @@ class User extends Authenticatable implements IShopModel
     }
 
     /**
+     * Collections belongs to this user
+     */
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
+    }
+
+    /**
      * Orders
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

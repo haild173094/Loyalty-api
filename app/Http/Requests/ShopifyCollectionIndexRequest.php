@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class ShopifyProductIndexRequest extends ShopifyResourceIndexRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class ShopifyCollectionIndexRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

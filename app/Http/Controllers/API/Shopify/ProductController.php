@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopifyProductIndexRequest;
 use App\Http\Resources\ShopifyResource;
 use App\Services\Shopify\Graphql\ProductService;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {

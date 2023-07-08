@@ -38,7 +38,9 @@ class ProductController extends Controller
     public function store(ProductStoreRequest $request)
     {
         $input = $request->validated();
-        return Auth::user()->products()->create($input);
+        $product = Auth::user()->products()->create($input);
+        $product->syncMetafield();
+        return $product;
     }
 
     /**

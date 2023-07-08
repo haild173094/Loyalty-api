@@ -214,4 +214,13 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    /**
+     * App custom config
+     */
+    'custom' => [
+        'metafield' => [
+            'namespace' => env('SHOPIFY_METAFIELD_NAMESPACE', 'oe_loyalty'),
+            'key' => env('SHOPIFY_METAFIELD_KEY', 'loyalty_data'),
+        ],
+    ],
 ];

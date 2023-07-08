@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopifyProductIndexRequest;
 use App\Http\Resources\ShopifyResource;
 use App\Services\Shopify\Graphql\ProductService;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,7 @@ class ProductController extends Controller
      */
     public function index(
         ShopifyProductIndexRequest $request,
-        ProductService $product_service,
+        ProductService $product_service
     ) {
         $input = $request->validated();
         $result = ShopifyResource::collection($product_service->list($input));
@@ -36,7 +37,7 @@ class ProductController extends Controller
     {
         $data = data_get($resources, 'data');
         return collect($data)->map(function ($product) {
-            return getIdFromShopifyId(data_get($product, 'id'));
+            return $this->getIdFromShopifyId(data_get($product, 'id'));
         })->toArray();
     }
 

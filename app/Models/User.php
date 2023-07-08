@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ShopifyType;
 use App\Exceptions\ShopifyGraphqlException;
 use App\Exceptions\ShopifyGraphqlUserError;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -132,6 +133,27 @@ class User extends Authenticatable implements IShopModel
     public function customers()
     {
         return $this->hasMany(Customer::class);
+    }
+
+    /**
+     * Discount blueprint
+     */
+    public function discountBlueprints()
+    {
+        return $this->hasMany(DiscountBlueprint::class);
+    }
+
+    /**
+     * Get product shopify graphql id
+     * @return string|null
+     */
+    public function getShopifyGraphqlId()
+    {
+        if (!$this->shop_id) {
+            return null;
+        }
+
+        return 'gid://shopify' . ShopifyType::Shop->value . '/' . $this->shop_id;
     }
 
     /**

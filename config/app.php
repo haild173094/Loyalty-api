@@ -221,6 +221,7 @@ return [
         'metafield' => [
             'namespace' => env('SHOPIFY_METAFIELD_NAMESPACE', 'oe_loyalty'),
             'key' => env('SHOPIFY_METAFIELD_KEY', 'loyalty_data'),
+            'prize_namespace' => env('SHOPIFY_METAFIELD_PRIZE_NAMESPACE', 'oe_loyalty_prize'),
         ],
     ],
 ];

@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ProductStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
-class ProductIndexRequest extends FormRequest
+class DiscountBlueprintIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -44,7 +41,7 @@ class ProductIndexRequest extends FormRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function validated($key = null, $default = null)
     {

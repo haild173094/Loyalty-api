@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\CollectionController;
+use App\Http\Controllers\API\DiscountBlueprintController;
 use App\Http\Controllers\API\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\API\Shopify\CollectionController as ShopifyCollectionController;
 use App\Http\Controllers\API\ProductController;
@@ -24,9 +26,25 @@ Route::namespace('API')->name('api.')->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'show'])->name('user.show');
         });
+
         Route::prefix('products')->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('products.index');
+            Route::post('/', [ProductController::class, 'store'])->name('products.store');
+            Route::put('{product}', [ProductController::class, 'update'])->name('products.update');
         });
+
+        Route::prefix('collections')->group(function () {
+            Route::get('/', [CollectionController::class, 'index'])->name('products.index');
+            Route::post('/', [CollectionController::class, 'store'])->name('products.store');
+            Route::put('{collection}', [CollectionController::class, 'update'])->name('products.update');
+        });
+
+        Route::prefix('discount-blueprints')->group(function () {
+            Route::get('/', [DiscountBlueprintController::class, 'index'])->name('discount-blueprints.index');
+            Route::post('/', [DiscountBlueprintController::class, 'store'])->name('discount-blueprints.store');
+            Route::put('{discount_blueprint}', [DiscountBlueprintController::class, 'update'])->name('discount-blueprints.update');
+        });
+
         Route::prefix('shopify')->group(function () {
             Route::get('products', [ShopifyProductController::class, 'index'])->name('shopify.products.index');
             Route::get('collections', [ShopifyCollectionController::class, 'index'])->name('shopify.collections.index');

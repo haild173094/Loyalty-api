@@ -64,7 +64,9 @@ class ProductController extends Controller
      */
     public function update(ProductUpdateRequest $request, Product $product)
     {
-        return $product->update($request->validated());
+        $product->update($request->validated());
+        $product->syncMetafield();
+        return $product;
     }
 
     /**

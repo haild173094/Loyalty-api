@@ -59,24 +59,7 @@ class User extends Authenticatable implements IShopModel
         "plan_name",
         "has_discounts",
         "has_gift_cards",
-        "myshopify_domain",
-        "google_apps_domain",
-        "google_apps_login_enabled",
-        "money_in_emails_format",
-        "money_with_currency_in_emails_format",
-        "eligible_for_payments",
-        "requires_extra_payments_agreement",
-        "password_enabled",
-        "has_storefront",
-        "cookie_consent_level",
-        "visitor_tracking_consent_preference",
-        "checkout_api_supported",
-        "multi_location_enabled",
-        "setup_required",
-        "pre_launch_enabled",
-        "enabled_presentment_currencies",
-        "transactional_sms_disabled",
-        "marketing_sms_consent_enabled_at_checkout"
+        "myshopify_domain"
     ];
 
     /**

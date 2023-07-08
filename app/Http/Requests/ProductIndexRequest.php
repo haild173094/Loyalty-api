@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\ProductStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductIndexRequest extends FormRequest
 {
@@ -32,10 +33,10 @@ class ProductIndexRequest extends FormRequest
                 'nullable',
                 Rule::in(['desc', 'asc']),
             ],
-            'status' => [
-                'nullable',
-                new Enum(ProductStatus::class),
-            ],
+            // 'status' => [
+            //     'nullable',
+            //     new Enum(ProductStatus::class),
+            // ],
             'page' => 'string|nullable',
             'limit' => 'integer|nullable',
         ];

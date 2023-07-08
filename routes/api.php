@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\API\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\API\Shopify\CollectionController as ShopifyCollectionController;
-use App\Http\Controllers\API\Shopify\ProductController;
-use App\Http\Controllers\Shopify\ProductController as ShopifyProductController;
+use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\Shopify\ProductController as ShopifyProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

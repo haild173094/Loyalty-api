@@ -38,7 +38,8 @@ class UpdateShopProfile implements ShouldQueue
     {
         $shop_service = App::make(ShopService::class, ['shop' => $this->user]);
         $shop_profile = $shop_service->getShopProfile();
-        $this->user->fill($shop_profile);
-        $this->user->save();
+        \Log::info(json_encode($shop_profile));
+        // $this->user->fill($shop_profile);
+        $this->user->update($shop_profile);
     }
 }

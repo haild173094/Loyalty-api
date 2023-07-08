@@ -16,10 +16,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('shopify_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedInteger('loyalty_point');
+            $table->unsignedInteger('loyalty_point')->default(0);
             $table->string('title');
             $table->string('image_src')->nullable();
-            $table->integer('status')->default(CollectionStatus::Unpublished);
+            $table->integer('status')->default(CollectionStatus::Published);
             $table->timestamps();
         });
     }

@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CollectionIndexRequest;
+use App\Http\Requests\CollectionStoreRequest;
+use App\Http\Requests\CollectionUpdateRequest;
 use App\Models\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CollectionController extends Controller
 {
@@ -25,7 +28,7 @@ class CollectionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(CollectionStoreRequest $request)
     {
         //
     }
@@ -33,9 +36,10 @@ class CollectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CollectionStoreRequest $request)
     {
-        //
+        $input = $request->validated();
+        return Auth::user()->collections()->create($input);
     }
 
     /**
@@ -57,9 +61,9 @@ class CollectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Collection $collection)
+    public function update(CollectionUpdateRequest $request, Collection $collection)
     {
-        //
+        return $collection->update($request->validated());
     }
 
     /**

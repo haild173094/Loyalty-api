@@ -20,6 +20,39 @@ class ProductController extends Controller
         ProductService $product_service,
     ) {
         $input = $request->validated();
-        return ShopifyResource::collection($product_service->list($input));
+        $result = ShopifyResource::collection($product_service->list($input));
+        $shopify_ids = $this->extractShopifyIdFromShopifyResource($result);
+        $products = Product::whereIn('shopify_id', $shopify_ids)->get();
+        $result['products'] = $products;
+        return $result;
+    }
+
+    /**
+     * Extract product ids from shopify product collection
+     *
+     * @param array|\Illuminate\Http\Resources\Json\AnonymousResourceCollection $resource
+     */
+    protected function extractShopifyIdFromShopifyResource($resources)
+    {
+        $data = data_get($resources, 'data');
+        return collect($data)->map(function ($product) {
+            return getIdFromShopifyId(data_get($product, 'id'));
+        })->toArray();
+    }
+
+    /**
+     * Get id from shopif id
+     *
+     * @return string
+     */
+    protected function getIdFromShopifyId($gid)
+    {
+        $last_slash_pos = strrpos($gid, '/');
+
+        if ($last_slash_pos === false) {
+            return $gid;
+        }
+
+        return substr($gid, $last_slash_pos + 1);
     }
 }

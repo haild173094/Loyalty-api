@@ -144,6 +144,14 @@ class User extends Authenticatable implements IShopModel
     }
 
     /**
+     * Loyalty rules
+     */
+    public function loyaltyRules()
+    {
+        return $this->hasMany(LoyaltyRule::class);
+    }
+
+    /**
      * Get product shopify graphql id
      * @return string|null
      */

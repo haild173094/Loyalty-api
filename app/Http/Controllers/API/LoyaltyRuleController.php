@@ -3,24 +3,23 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CollectionIndexRequest;
-use App\Http\Requests\CollectionStoreRequest;
-use App\Http\Requests\CollectionUpdateRequest;
-use App\Models\Collection;
+use App\Http\Requests\LoyaltyRuleIndexRequest;
+use App\Http\Requests\LoyaltyRuleStoreRequest;
+use App\Models\LoyaltyRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CollectionController extends Controller
+class LoyaltyRuleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(CollectionIndexRequest $request)
+    public function index(LoyaltyRuleIndexRequest $request)
     {
         $input = $request->validated();
         return auth()
             ->user()
-            ->collections()
+            ->loyaltyRules()
             ->search($input)
             ->paginate($input['limit'], '[*]', 'page', $input['page']);
     }
@@ -28,7 +27,7 @@ class CollectionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(CollectionStoreRequest $request)
+    public function create()
     {
         //
     }
@@ -36,16 +35,18 @@ class CollectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CollectionStoreRequest $request)
+    public function store(LoyaltyRuleStoreRequest $request)
     {
         $input = $request->validated();
-        return Auth::user()->collections()->create($input);
+        $loyalty_rule = Auth::user()->loyaltyRules()->create($input);
+        $loyalty_rule->syncMetafield();
+        return $loyalty_rule;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Collection $collection)
+    public function show(LoyaltyRule $loyaltyRule)
     {
         //
     }
@@ -53,7 +54,7 @@ class CollectionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Collection $collection)
+    public function edit(LoyaltyRule $loyaltyRule)
     {
         //
     }
@@ -61,15 +62,17 @@ class CollectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CollectionUpdateRequest $request, Collection $collection)
+    public function update(Request $request, LoyaltyRule $loyalty_rule)
     {
-        return $collection->update($request->validated());
+        $loyalty_rule->update($request->validated());
+        $loyalty_rule->syncMetafield();
+        return $loyalty_rule;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Collection $collection)
+    public function destroy(LoyaltyRule $loyaltyRule)
     {
         //
     }

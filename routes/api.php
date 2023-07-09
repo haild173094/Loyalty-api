@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CollectionController;
 use App\Http\Controllers\API\DiscountBlueprintController;
+use App\Http\Controllers\API\LoyaltyRuleController;
 use App\Http\Controllers\API\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\API\Shopify\CollectionController as ShopifyCollectionController;
 use App\Http\Controllers\API\ProductController;
@@ -43,6 +44,12 @@ Route::namespace('API')->name('api.')->group(function () {
             Route::get('/', [DiscountBlueprintController::class, 'index'])->name('discount-blueprints.index');
             Route::post('/', [DiscountBlueprintController::class, 'store'])->name('discount-blueprints.store');
             Route::put('{discount_blueprint}', [DiscountBlueprintController::class, 'update'])->name('discount-blueprints.update');
+        });
+
+        Route::prefix('loyalty-rules')->group(function() {
+            Route::get('/', [LoyaltyRuleController::class, 'index'])->name('loyalty-rules.index');
+            Route::post('/', [LoyaltyRuleController::class, 'store'])->name('loyalty-rules.store');
+            Route::put('{loyalty_rule}', [LoyaltyRuleController::class, 'update'])->name('loyalty-rules.update');
         });
 
         Route::prefix('shopify')->group(function () {

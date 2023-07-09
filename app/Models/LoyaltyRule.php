@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Enums\DiscountApplicationType;
-use App\Enums\DiscountType;
+use App\Enums\LoyaltyRuleStatus;
 use App\Services\Shopify\Graphql\MetafieldService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
-class DiscountBlueprint extends Model
+class LoyaltyRule extends Model
 {
     use HasFactory;
 
@@ -24,32 +23,51 @@ class DiscountBlueprint extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'description',
+        'shopify_id',
+        'loyalty_point',
         'type',
-        'amount',
-        'loyalty_price',
-        'customer_selection',
-        'time_limit',
+        'status',
     ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $casts = [
-        'type' => DiscountType::class,
-        'customer_selection' => DiscountApplicationType::class,
+        'status' => LoyaltyRuleStatus::class,
     ];
 
     /**
-     * Belongs to relationship with user
+     * User own this product
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Scope for search
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder  $query
+     * @param array $input
+     * 
+     * @return \Illuminate\Database\Eloquent\Builder 
+     */
+    public function scopeSearch($query, $input)
+    {
+        if (isset($input['query'])) {
+            $query->where('name', 'ILIKE', "%{$input['query']}%");
+        }
+
+        if (isset($input['status'])) {
+            $query->where('status', $input['status']);
+        }
+
+        $query->orderBy($input['order_by'], $input['sort']);
+        return $query;
     }
 
     /**
@@ -66,7 +84,7 @@ class DiscountBlueprint extends Model
                     [
                         'onwerId' => $owner_id,
                         'type' => 'json',
-                        'namespace' => config('app.custom.metafield.prize_namespace'),
+                        'namespace' => config('app.custom.metafield.rule_namespace'),
                         'key' => $this->getMetafieldKey(),
                         'value' => json_encode($this->only($this->fillable)),
                     ],

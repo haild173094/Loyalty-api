@@ -64,6 +64,8 @@ return new class extends Migration
             $table->boolean('multi_location_enabled')->nullable();
             $table->boolean('setup_required')->nullable();
             $table->boolean('pre_launch_enabled')->nullable();
+            $table->boolean('transactional_sms_disabled')->nullable();
+            $table->boolean('marketing_sms_consent_enabled_at_checkout')->nullable();
             $table->json('enabled_presentment_currencies')->nullable();
         });
     }

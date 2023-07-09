@@ -15,7 +15,7 @@ class ShopService extends BaseService
     protected function getShopData()
     {
         $response = $this->getShop()->api()->rest('GET', '/admin/shop.json');
-        return data_get($response, 'body.shop');
+        return data_get($response, 'body.shop')->toArray();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\LoyaltyRuleApplicationType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoyaltyRuleUpdateRequest extends FormRequest

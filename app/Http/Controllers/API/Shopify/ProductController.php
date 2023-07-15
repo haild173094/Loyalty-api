@@ -21,11 +21,7 @@ class ProductController extends Controller
         ProductService $product_service
     ) {
         $input = $request->validated();
-        $result = ShopifyResource::collection($product_service->list($input));
-        $shopify_ids = $this->extractShopifyIdFromShopifyResource($result);
-        $products = Product::whereIn('shopify_id', $shopify_ids)->get();
-        $result['products'] = $products;
-        return $result;
+        return ShopifyResource::collection($product_service->list($input));
     }
 
     /**

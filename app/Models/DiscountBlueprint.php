@@ -32,6 +32,7 @@ class DiscountBlueprint extends Model
         'customer_selection',
         'time_limit',
     ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -75,8 +76,96 @@ class DiscountBlueprint extends Model
         }
     }
 
+    /**
+     * Get metafield key
+     *
+     * @return string
+     */
     public function getMetafieldKey()
     {
         return sprintf("%0" . self::METAFIELD_KEY_LENGTH . "d", $this->id);
+    }
+
+    /**
+     * Get discount value
+     *
+     * @return array
+     */
+    public function getDiscountValue()
+    {
+        if ($this->type == DiscountType::Amount) {
+            return [
+                'discountAmount' => [
+                    'amount' => $this->amount,
+                    'appliesOnEachItem' => false,
+                ],
+            ];
+        } else {
+            return [
+                'percentage' => $this->amount / 100,
+            ];
+        }
+    }
+
+    /**
+     * Get customer selection
+     *
+     * @param \App\Models\Customer $customer
+     * @return array
+     */
+    public function getCustomerSelections(Customer $customer)
+    {
+        if ($this->customer_selection == DiscountApplicationType::All) {
+            return [
+                'all' => true,
+            ];
+        } else {
+            return [
+                'customers' => [
+                    'add' => $customer->shopify_id,
+                ],
+            ];
+        }
+    }
+
+    /**
+     * Get shopify input for creating discount
+     *
+     * @param \App\Models\Customer $customer
+     * @return array
+     */
+    public function toShopify(Customer $customer)
+    {
+        return [
+            'appliesOncePerCustomer' => true,
+            'code' => 'Cringe as fuck',
+            'combinesWith' => [
+                'orderDiscounts' => false,
+                'productDiscounts' => false,
+                'shippingDiscounts' => false,
+            ],
+            'customerGets' => [
+                'appliesOnOneTimePurchase' => true,
+                'items' => [
+                    'all' => true,
+                ],
+                'value' => $this->getDiscountValue(),
+            ],
+            'customerSelections' => $this->getCustomerSelections($customer),
+            'endsAt' => now()->addSeconds($this->time_limit)->toISOString(),
+            'startsAt' => now()->toISOString(),
+            'title' => uniqid(),
+            'usageLimit' => 1,
+        ];
+    }
+
+    /**
+     * Generate unique id for discount code
+     *
+     * @return string
+     */
+    public function generateDiscountCode()
+    {
+        return uniqid();
     }
 }

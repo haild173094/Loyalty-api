@@ -21,7 +21,7 @@ class LoyaltyRuleController extends Controller
             ->user()
             ->loyaltyRules()
             ->search($input)
-            ->paginate($input['limit'], '[*]', 'page', $input['page']);
+            ->paginate($input['limit'], ['*'], 'page', $input['page']);
     }
 
     /**

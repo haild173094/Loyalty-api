@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum LoyaltyRuleApplicationType: string
 {
-    const Product = 'product';
-    const Collection = 'collection';
+    case Product = 'product';
+    case Collection = 'collection';
 }

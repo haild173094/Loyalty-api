@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum CollectionStatus: int
 {
-    const Unpublished = 0;
-    const Published = 1;
+    case Unpublished = 0;
+    case Published = 1;
 }

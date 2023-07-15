@@ -66,6 +66,10 @@ class LoyaltyRule extends Model
             $query->where('status', $input['status']);
         }
 
+        if (isset($input['type'])) {
+            $query->where('type', $input['type']);
+        }
+
         $query->orderBy($input['order_by'], $input['sort']);
         return $query;
     }

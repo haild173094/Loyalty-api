@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\LoyaltyRuleApplicationType;
 use App\Enums\LoyaltyRuleStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -37,6 +38,10 @@ class LoyaltyRuleIndexRequest extends FormRequest
             'status' => [
                 'nullable',
                 new Enum(LoyaltyRuleStatus::class),
+            ],
+            'type' => [
+                'nullable',
+                new Enum(LoyaltyRuleApplicationType::class),
             ],
             'page' => 'string|nullable',
             'limit' => 'integer|nullable',

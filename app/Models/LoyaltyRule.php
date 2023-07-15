@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\LoyaltyRuleApplicationType;
 use App\Enums\LoyaltyRuleStatus;
+use App\Enums\ShopifyType;
 use App\Services\Shopify\Graphql\MetafieldService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,11 +54,11 @@ class LoyaltyRule extends Model
 
     /**
      * Scope for search
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder  $query
      * @param array $input
-     * 
-     * @return \Illuminate\Database\Eloquent\Builder 
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearch($query, $input)
     {

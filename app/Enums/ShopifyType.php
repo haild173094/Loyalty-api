@@ -1,13 +1,8 @@
 <?php
-
 namespace App\Enums;
-
-use App\Traits\Enum;
 
 enum ShopifyType: string
 {
-    use Enum;
-
     case Customer = 'Customer';
     case Product = 'Product';
     case ProductVariant = 'ProductVariant';

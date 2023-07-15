@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ShopifyType;
 use App\Exceptions\ShopifyGraphqlException;
 use App\Exceptions\ShopifyGraphqlUserError;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Osiset\ShopifyApp\Contracts\ShopModel as IShopModel;
 use Osiset\ShopifyApp\Traits\ShopModel;
 use Illuminate\Support\Arr;
+use App\Enums\ShopifyType;
 
 class User extends Authenticatable implements IShopModel
 {

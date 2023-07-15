@@ -62,6 +62,6 @@ class MetafieldService extends BaseService
 
         $response = $this->getShop()->graph($query, $params);
 
-        return data_get($response, 'body.data.metafieldsSet.metafields', [])->toArray();
+        return data_get($response, 'body.data.metafieldsSet.metafields', []);
     }
 }

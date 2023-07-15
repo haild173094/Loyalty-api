@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\LoyaltyRuleApplicationType;
 use App\Enums\LoyaltyRuleStatus;
 use App\Services\Shopify\Graphql\MetafieldService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ class LoyaltyRule extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'name',
         'shopify_id',
         'loyalty_point',
         'type',
@@ -36,6 +38,7 @@ class LoyaltyRule extends Model
      */
     protected $casts = [
         'status' => LoyaltyRuleStatus::class,
+        'type' => LoyaltyRuleApplicationType::class,
     ];
 
     /**

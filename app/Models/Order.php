@@ -17,7 +17,6 @@ class Order extends Model
     protected $fillable = [
         'shopify_id',
         'customer_id',
-        'loyalty_point',
         'rewarded_point',
         'token',
         'processed_at',

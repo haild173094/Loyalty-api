@@ -18,10 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('type')->default(DiscountType::Percentage);
+            $table->string('type')->default(DiscountType::Percentage->value);
             $table->double('amount');
             $table->unsignedBigInteger('loyalty_price');
-            $table->string('customer_selection')->default(DiscountApplicationType::One);
+            $table->string('customer_selection')->default(DiscountApplicationType::One->value);
             $table->unsignedBigInteger('time_limit');
             $table->timestamps();
         });

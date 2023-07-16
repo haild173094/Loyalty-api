@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('shopify_id');
             $table->string('name');
             $table->unsignedInteger('loyalty_point');
-            $table->string('type')->default(LoyaltyRuleApplicationType::Product);
-            $table->integer('status')->default(LoyaltyRuleStatus::Published);
+            $table->string('type')->default(LoyaltyRuleApplicationType::Product->value);
+            $table->integer('status')->default(LoyaltyRuleStatus::Published->value);
             $table->timestamps();
         });
     }

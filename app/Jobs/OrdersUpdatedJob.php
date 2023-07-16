@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Osiset\ShopifyApp\Objects\Values\ShopDomain;
 use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
+use stdClass;
 
 class OrdersUpdatedJob implements ShouldQueue
 {
@@ -121,6 +122,7 @@ class OrdersUpdatedJob implements ShouldQueue
                 $loyaltyRule = $user->loyaltyRules()
                     ->where('status', LoyaltyRuleStatus::Published)
                     ->where('shopify_id', data_get($property, 'value'))
+                    ->orderBy('id', 'desc')
                     ->first();
 
                 if (!$loyaltyRule) {

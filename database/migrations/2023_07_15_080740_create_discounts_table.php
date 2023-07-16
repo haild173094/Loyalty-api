@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('discount_blueprint_id');
             $table->string('code');
             $table->double('amount');
-            $table->string('type')->default(DiscountType::Amount);
-            $table->string('customer_selection')->default(DiscountApplicationType::All);
+            $table->string('type')->default(DiscountType::Amount->value);
+            $table->string('customer_selection')->default(DiscountApplicationType::All->value);
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
             $table->timestamps();

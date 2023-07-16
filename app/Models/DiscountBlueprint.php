@@ -65,7 +65,7 @@ class DiscountBlueprint extends Model
             $metafield_service->updateMetafields(
                 [
                     [
-                        'onwerId' => $owner_id,
+                        'ownerId' => $owner_id,
                         'type' => 'json',
                         'namespace' => config('app.custom.metafield.prize_namespace'),
                         'key' => $this->getMetafieldKey(),

@@ -356,8 +356,8 @@ return [
             'address' => env('SHOPIFY_WEBHOOK_PATH') . '/app-uninstalled',
         ],
         [
-            'topic' => env('SHOPIFY_ORDERS_PAID', 'ORDERS_PAID'),
-            'address' => env('SHOPIFY_WEBHOOH_PATH', '/orders-paid'),
+            'topic' => env('SHOPIFY_ORDERS_UPDATED', 'ORDERS_UPDATED'),
+            'address' => env('SHOPIFY_WEBHOOK_PATH') . '/orders-updated',
         ],
     ],
 

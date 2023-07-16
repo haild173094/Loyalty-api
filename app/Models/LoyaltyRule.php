@@ -87,17 +87,20 @@ class LoyaltyRule extends Model
         $owner_id = $this->user->getShopifyGraphqlId();
 
         if ($owner_id) {
-            $metafield_service->updateMetafields(
+            $test = $metafield_service->updateMetafields(
                 [
-                    [
-                        'onwerId' => $owner_id,
-                        'type' => 'json',
-                        'namespace' => config('app.custom.metafield.rule_namespace'),
-                        'key' => $this->getMetafieldKey(),
-                        'value' => json_encode($this->only($this->fillable)),
+                    'metafields' => [
+                        [
+                            'ownerId' => $owner_id,
+                            'type' => 'json',
+                            'namespace' => config('app.custom.metafield.rule_namespace'),
+                            'key' => $this->getMetafieldKey(),
+                            'value' => json_encode($this->only($this->fillable)),
+                        ],
                     ],
                 ],
             );
+            \Log::info($test);
         }
     }
 

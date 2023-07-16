@@ -8,6 +8,7 @@ use App\Http\Requests\LoyaltyRuleStoreRequest;
 use App\Models\LoyaltyRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\LoyaltyRuleStatus;
 
 class LoyaltyRuleController extends Controller
 {
@@ -38,7 +39,10 @@ class LoyaltyRuleController extends Controller
     public function store(LoyaltyRuleStoreRequest $request)
     {
         $input = $request->validated();
+        $input['status'] = LoyaltyRuleStatus::Published;
+
         $loyalty_rule = Auth::user()->loyaltyRules()->create($input);
+
         $loyalty_rule->syncMetafield();
         return $loyalty_rule;
     }

@@ -161,7 +161,7 @@ class User extends Authenticatable implements IShopModel
             return null;
         }
 
-        return 'gid://shopify' . ShopifyType::Shop->value . '/' . $this->shop_id;
+        return 'gid://shopify/' . ShopifyType::Shop->value . '/' . $this->shop_id;
     }
 
     /**

@@ -4,8 +4,9 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Osiset\ShopifyApp\Actions\DispatchWebhooks;
+use App\Models\User;
 
-class ResetUsersWebhook extends Command
+class ResetUsersWebhooks extends Command
 {
     /**
      * The name and signature of the console command.
@@ -42,6 +43,8 @@ class ResetUsersWebhook extends Command
                             call_user_func($dispatchWebhooksAction, $user->getId(), true);
                             $this->info("User " . $user->id . " domain " . $user->name . " done");
                         } catch (\Exception $e) {
+                            \Log::error($e);
+
                             $this->error("Failed to reset webhook of user " . $user->id . " domain " . $user->name . " error " . $e->getMessage());
                         }
                     }

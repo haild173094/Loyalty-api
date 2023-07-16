@@ -47,11 +47,11 @@ class Product extends Model
 
     /**
      * Scope for search
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder  $query
      * @param array $input
-     * 
-     * @return \Illuminate\Database\Eloquent\Builder 
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearch($query, $input)
     {
@@ -122,6 +122,6 @@ class Product extends Model
             return null;
         }
 
-        return 'gid://shopify' . ShopifyType::Product->value . '/' . $this->shopify_id;
+        return 'gid://shopify/' . ShopifyType::Product->value . '/' . $this->shopify_id;
     }
 }

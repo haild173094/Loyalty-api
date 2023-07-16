@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('loyalty_point')->default(0);
             $table->string('title');
             $table->string('image_src')->nullable();
-            $table->integer('status')->default(CollectionStatus::Published);
+            $table->integer('status')->default(CollectionStatus::Published->value);
             $table->timestamps();
         });
     }

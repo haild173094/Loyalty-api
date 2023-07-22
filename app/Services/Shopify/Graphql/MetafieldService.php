@@ -64,4 +64,29 @@ class MetafieldService extends BaseService
 
         return data_get($response, 'body.data.metafieldsSet.metafields', []);
     }
+
+    /**
+     * Delete a metafield using graphql
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    public function deleteMetafield($params)
+    {
+        $query = <<<'GRAPHQL'
+            mutation metafieldDelete($input: MetafieldDeleteInput!) {
+                metafieldDelete(input: $input) {
+                    deletedId
+                    userErrors {
+                        field
+                        message
+                    }
+                }
+            }
+            GRAPHQL;
+
+        $response = $this->getShop()->graph($query, $params);
+        return data_get($response, 'body.data.metafieldDelete');
+    }
 }

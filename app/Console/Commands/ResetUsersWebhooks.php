@@ -35,6 +35,14 @@ class ResetUsersWebhooks extends Command
                 $this->error("User not found");
                 return;
             }
+            try {
+                call_user_func($dispatchWebhooksAction, $user->getId(), true);
+                $this->info("User " . $user->id . " domain " . $user->name . " done");
+            } catch (\Exception $e) {
+                \Log::error($e);
+
+                $this->error("Failed to reset webhook of user " . $user->id . " domain " . $user->name . " error " . $e->getMessage());
+            }
         } else {
             if ($this->confirm("Are you sure want to reset all users' webhooks?", false)) {
                 User::chunk(50, function ($users) use ($dispatchWebhooksAction) {

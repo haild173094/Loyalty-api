@@ -8,6 +8,7 @@ use App\Http\Requests\DiscountBlueprintStoreRequest;
 use App\Http\Requests\DiscountBlueprintUpdateRequest;
 use App\Models\DiscountBlueprint;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DiscountBlueprintController extends Controller
 {
@@ -72,8 +73,10 @@ class DiscountBlueprintController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DiscountBlueprint $discountBlueprint)
+    public function destroy(DiscountBlueprint $discount_blueprint)
     {
-        //
+        $discount_blueprint->deleteAssociatedMetafield();
+        $discount_blueprint->delete();
+        return new Response('No content', 204);
     }
 }

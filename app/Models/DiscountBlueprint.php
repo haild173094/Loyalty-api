@@ -65,7 +65,7 @@ class DiscountBlueprint extends Model
         $owner_id = $this->user->getShopifyGraphqlId();
 
         if ($owner_id) {
-            $metafield_service->updateMetafields(
+            $result = $metafield_service->updateMetafields(
                 [
                     [
                         'ownerId' => $owner_id,
@@ -76,6 +76,13 @@ class DiscountBlueprint extends Model
                     ],
                 ],
             );
+
+            $metafield_id = data_get($result, '0.id');
+
+            if ($metafield_id) {
+                $this->metafield_id = $metafield_id;
+                $this->save();
+            }
         }
     }
 
@@ -170,5 +177,24 @@ class DiscountBlueprint extends Model
     public function generateDiscountCode()
     {
         return uniqid();
+    }
+
+    /**
+     * Delete option's associated metafield
+     * 
+     * @return mixed
+     */
+    public function deleteAssociatedMetafield()
+    {
+        if (!$this->metafield_id) {
+            return;
+        }
+        $user = $this->user;
+        $metafield_service = App::make(MetafieldService::class, ['shop' => $user]);
+        return $metafield_service->deleteMetafield([
+            'input' => [
+                'id' => $this->metafield_id,
+            ],
+        ]);
     }
 }

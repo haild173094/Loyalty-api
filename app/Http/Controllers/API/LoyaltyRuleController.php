@@ -9,6 +9,7 @@ use App\Models\LoyaltyRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\LoyaltyRuleStatus;
+use Illuminate\Http\Response;
 
 class LoyaltyRuleController extends Controller
 {
@@ -76,8 +77,10 @@ class LoyaltyRuleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LoyaltyRule $loyaltyRule)
+    public function destroy(LoyaltyRule $loyalty_rule)
     {
-        //
+        $loyalty_rule->deleteAssociatedMetafield();
+        $loyalty_rule->delete();
+        return new Response('No content', 204);
     }
 }

@@ -17,7 +17,7 @@ class CollectionService extends BaseService
     {
         $query = <<<'GRAPHQL'
             query GetCollections($before: String, $after: String, $first: Int, $last: Int, $query: String) {
-                products(before: $before, after: $after, first: $first, last: $last, query: $query) {
+                collections(before: $before, after: $after, first: $first, last: $last, query: $query) {
                     edges {
                         cursor
                         node {

@@ -21,7 +21,7 @@ class CustomerController extends Controller
         $input = $request->validated();
         $user = User::where('name', $input['shop'])->firstOrFail();
         return $user
-            ->customers()
+            ->customers()->with('discounts')
             ->where('shopify_id', $input['logged_in_customer_id'])
             ->first();
     }

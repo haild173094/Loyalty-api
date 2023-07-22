@@ -129,13 +129,6 @@ class OrdersUpdatedJob implements ShouldQueue
                     return 0;
                 }
 
-                if ($loyaltyRule->type == LoyaltyRuleApplicationType::Product) {
-                    $product_id = data_get($line_item, 'product_id');
-                    if ($product_id != $loyaltyRule->shopify_id) {
-                        return 0;
-                    }
-                }
-
                 return $loyaltyRule->loyalty_point;
             }
         }

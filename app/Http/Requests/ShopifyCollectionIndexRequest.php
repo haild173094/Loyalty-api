@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 
-class ShopifyCollectionIndexRequest extends FormRequest
+class ShopifyCollectionIndexRequest extends ShopifyResourceIndexRequest
 {
     /**
      * Get the validation rules that apply to the request.

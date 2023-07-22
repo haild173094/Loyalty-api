@@ -36,7 +36,7 @@ class CustomerDiscountController extends Controller
         DiscountService $discount_service,
     ) {
         $input = $request->validated();
-        $user = auth()->user();
+        $user = User::where('name', $input['shop'])->firstOrFail();
         $customer = $user->customers()->where('shopify_id', $input['logged_in_customer_id'])->firstOrFail();
         $discount_blueprint = $user->discountBlueprints()
             ->where('id', $input['discount_blueprint_id'])

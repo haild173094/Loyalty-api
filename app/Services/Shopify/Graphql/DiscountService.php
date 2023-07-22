@@ -61,6 +61,6 @@ class DiscountService extends BaseService
 
         $response = $this->getShop()->graph($query, $params);
 
-        return data_get($response, 'body.data.discountCodeBasicCreate');
+        return data_get($response, 'body.data.discountCodeBasicCreate.codeDiscountNode.codeDiscount');
     }
 }

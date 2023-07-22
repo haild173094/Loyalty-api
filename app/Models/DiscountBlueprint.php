@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\DiscountApplicationType;
+use App\Enums\DiscountBlueprintStatus;
 use App\Enums\DiscountType;
 use App\Services\Shopify\Graphql\MetafieldService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +32,7 @@ class DiscountBlueprint extends Model
         'loyalty_price',
         'customer_selection',
         'time_limit',
+        'status',
     ];
 
     /**
@@ -41,6 +43,7 @@ class DiscountBlueprint extends Model
     protected $casts = [
         'type' => DiscountType::class,
         'customer_selection' => DiscountApplicationType::class,
+        'status' => DiscountBlueprintStatus::class,
     ];
 
     /**
@@ -138,7 +141,7 @@ class DiscountBlueprint extends Model
     {
         return [
             'appliesOncePerCustomer' => true,
-            'code' => 'Cringe as fuck',
+            'code' => $this->generateDiscountCode(),
             'combinesWith' => [
                 'orderDiscounts' => false,
                 'productDiscounts' => false,
@@ -154,7 +157,7 @@ class DiscountBlueprint extends Model
             'customerSelections' => $this->getCustomerSelections($customer),
             'endsAt' => now()->addSeconds($this->time_limit)->toISOString(),
             'startsAt' => now()->toISOString(),
-            'title' => uniqid(),
+            'title' => $this->name,
             'usageLimit' => 1,
         ];
     }

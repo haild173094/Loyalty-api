@@ -4,6 +4,7 @@ use App\Http\Controllers\API\CollectionController;
 use App\Http\Controllers\API\DiscountBlueprintController;
 use App\Http\Controllers\API\LoyaltyRuleController;
 use App\Http\Controllers\API\Merchant\CustomerController as MerchantCustomerController;
+use App\Http\Controllers\API\Merchant\CustomerDiscountController as MerchantCustomerDiscountController;
 use App\Http\Controllers\API\Shopify\CollectionController as ShopifyCollectionController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
@@ -63,5 +64,7 @@ Route::namespace('API')->name('api.')->group(function () {
         'middlewares' => ['auth.proxy'],
     ], function () {
         Route::get('customer', [MerchantCustomerController::class, 'show'])->name('proxy.customer.show');
+        Route::get('customer/discounts', [MerchantCustomerDiscountController::class, 'index'])->name('proxy.customer.discount.index');
+        Route::get('customer/discounts/redeem', [MerchantCustomerDiscountController::class, 'redeem'])->name('proxy.customer.discount.redeem');
     });
 });

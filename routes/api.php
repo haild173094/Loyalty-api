@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\CollectionController;
 use App\Http\Controllers\API\DiscountBlueprintController;
 use App\Http\Controllers\API\LoyaltyRuleController;
-use App\Http\Controllers\API\Merchant\ProductController as MerchantProductController;
+use App\Http\Controllers\API\Merchant\CustomerController as MerchantCustomerController;
 use App\Http\Controllers\API\Shopify\CollectionController as ShopifyCollectionController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
@@ -46,7 +46,7 @@ Route::namespace('API')->name('api.')->group(function () {
             Route::put('{discount_blueprint}', [DiscountBlueprintController::class, 'update'])->name('discount-blueprints.update');
         });
 
-        Route::prefix('loyalty-rules')->group(function() {
+        Route::prefix('loyalty-rules')->group(function () {
             Route::get('/', [LoyaltyRuleController::class, 'index'])->name('loyalty-rules.index');
             Route::post('/', [LoyaltyRuleController::class, 'store'])->name('loyalty-rules.store');
             Route::put('{loyalty_rule}', [LoyaltyRuleController::class, 'update'])->name('loyalty-rules.update');
@@ -58,7 +58,10 @@ Route::namespace('API')->name('api.')->group(function () {
         });
     });
 
-    Route::prefix('merchant')->group(function () {
-        Route::prefix('product', [MerchantProductController::class, 'show'])->name('merchant.product.get');
+    Route::group([
+        'prefix' => 'proxy',
+        'middlewares' => ['auth.proxy'],
+    ], function () {
+        Route::get('customer', [MerchantCustomerController::class, 'show'])->name('proxy.customer.show');
     });
 });

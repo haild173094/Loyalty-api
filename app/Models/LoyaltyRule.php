@@ -87,7 +87,7 @@ class LoyaltyRule extends Model
         $owner_id = $this->user->getShopifyGraphqlId();
 
         if ($owner_id) {
-            $test = $metafield_service->updateMetafields(
+            $metafield_service->updateMetafields(
                 [
                     'metafields' => [
                         [
@@ -100,7 +100,6 @@ class LoyaltyRule extends Model
                     ],
                 ],
             );
-            \Log::info($test);
         }
     }
 

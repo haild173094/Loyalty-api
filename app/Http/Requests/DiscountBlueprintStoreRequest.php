@@ -14,7 +14,7 @@ class DiscountBlueprintStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -31,13 +31,13 @@ class DiscountBlueprintStoreRequest extends FormRequest
                 'required',
                 new Enum(DiscountType::class),
             ],
-            'amount' => 'number|required',
-            'loyalty_price' => 'number|required',
+            'amount' => 'numeric|required',
+            'loyalty_price' => 'integer|required',
             'customer_selection' => [
                 'required',
                 new Enum(DiscountApplicationType::class),
             ],
-            'time_limit' => 'number|required',
+            'time_limit' => 'integer|required',
         ];
     }
 }

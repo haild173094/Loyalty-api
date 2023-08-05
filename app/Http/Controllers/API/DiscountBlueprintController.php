@@ -9,6 +9,8 @@ use App\Http\Requests\DiscountBlueprintUpdateRequest;
 use App\Models\DiscountBlueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use App\Enums\DiscountBlueprintStatus;
 
 class DiscountBlueprintController extends Controller
 {
@@ -20,9 +22,9 @@ class DiscountBlueprintController extends Controller
         $input = $request->validated();
         return auth()
             ->user()
-            ->products()
-            ->search($input)
-            ->paginate($input['limit'], '[*]', 'page', $input['page']);
+            ->discountBlueprints()
+            // ->search($input)
+            ->paginate($input['limit'], ['*'], 'page', $input['page']);
     }
 
     /**
@@ -39,7 +41,9 @@ class DiscountBlueprintController extends Controller
     public function store(DiscountBlueprintStoreRequest $request)
     {
         $input = $request->validated();
-        $discount_blueprint = Auth::user()->products()->create($input);
+        $input['status'] = DiscountBlueprintStatus::Published;
+
+        $discount_blueprint = Auth::user()->discountBlueprints()->create($input);
         $discount_blueprint->syncMetafield();
         return $discount_blueprint;
     }

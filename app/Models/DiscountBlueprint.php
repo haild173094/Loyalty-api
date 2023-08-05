@@ -61,25 +61,42 @@ class DiscountBlueprint extends Model
      */
     public function syncMetafield()
     {
-        $metafield_service = App::make(MetafieldService::class);
+        $metafield_service = App::make(MetafieldService::class, ['shop' => $this->user]);
         $owner_id = $this->user->getShopifyGraphqlId();
+
+        \Log::info($this->only($this->fillable));
 
         if ($owner_id) {
             $result = $metafield_service->updateMetafields(
                 [
-                    [
-                        'ownerId' => $owner_id,
-                        'type' => 'json',
-                        'namespace' => config('app.custom.metafield.prize_namespace'),
-                        'key' => $this->getMetafieldKey(),
-                        'value' => json_encode($this->only($this->fillable)),
+                    'metafields' => [
+                        [
+                            'ownerId' => $owner_id,
+                            'type' => 'json',
+                            'namespace' => config('app.custom.metafield.prize_namespace'),
+                            'key' => $this->getMetafieldKey(),
+                            'value' => json_encode($this->only([
+                                'name',
+                                'description',
+                                'type',
+                                'amount',
+                                'loyalty_price',
+                                'customer_selection',
+                                'time_limit',
+                                'status',
+                                'id',
+                            ])),
+                        ],
                     ],
                 ],
             );
 
+            \Log::info(json_encode($result));
+
             $metafield_id = data_get($result, '0.id');
 
             if ($metafield_id) {
+                \Log::info(data_get($result, '0.id'));
                 $this->metafield_id = $metafield_id;
                 $this->save();
             }
@@ -181,7 +198,7 @@ class DiscountBlueprint extends Model
 
     /**
      * Delete option's associated metafield
-     * 
+     *
      * @return mixed
      */
     public function deleteAssociatedMetafield()

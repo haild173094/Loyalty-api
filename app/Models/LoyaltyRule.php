@@ -83,7 +83,7 @@ class LoyaltyRule extends Model
      */
     public function syncMetafield()
     {
-        $metafield_service = App::make(MetafieldService::class);
+        $metafield_service = App::make(MetafieldService::class, ['shop' => $this->user]);
         $owner_id = $this->user->getShopifyGraphqlId();
 
         if ($owner_id) {
@@ -117,7 +117,7 @@ class LoyaltyRule extends Model
 
     /**
      * Delete option's associated metafield
-     * 
+     *
      * @return mixed
      */
     public function deleteAssociatedMetafield()

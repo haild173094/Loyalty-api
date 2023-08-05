@@ -8,6 +8,7 @@ use App\Http\Requests\Merchant\CustomerDiscountIndexRequest;
 use App\Http\Requests\Merchant\CustomerDiscountRedeemRequest;
 use App\Services\Shopify\Graphql\DiscountService;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class CustomerDiscountController extends Controller
 {
@@ -33,11 +34,11 @@ class CustomerDiscountController extends Controller
      */
     public function redeem(
         CustomerDiscountRedeemRequest $request,
-        DiscountService $discount_service,
     ) {
         $input = $request->validated();
         $user = User::where('name', $input['shop'])->firstOrFail();
         $customer = $user->customers()->where('shopify_id', $input['logged_in_customer_id'])->firstOrFail();
+        $discount_service = new DiscountService($user);
         $discount_blueprint = $user->discountBlueprints()
             ->where('id', $input['discount_blueprint_id'])
             ->where('status', DiscountBlueprintStatus::Published)
@@ -47,7 +48,7 @@ class CustomerDiscountController extends Controller
             abort(400, "Not enough point");
         }
 
-        $code_discount = $discount_service->createBasicDiscount($discount_blueprint->toShopify());
+        $code_discount = $discount_service->createBasicDiscount($discount_blueprint->toShopify($customer));
 
         if (!$code_discount) {
             abort(500, 'Somethings went wrong, can not redeem');

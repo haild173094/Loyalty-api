@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoyaltyRuleIndexRequest;
 use App\Http\Requests\LoyaltyRuleStoreRequest;
+use App\Http\Requests\LoyaltyRuleUpdateRequest;
 use App\Models\LoyaltyRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,7 @@ class LoyaltyRuleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LoyaltyRule $loyalty_rule)
+    public function update(LoyaltyRuleUpdateRequest $request, LoyaltyRule $loyalty_rule)
     {
         $loyalty_rule->update($request->validated());
         $loyalty_rule->syncMetafield();

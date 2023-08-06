@@ -32,7 +32,8 @@ class CustomerDiscountController extends Controller
      *
      * @return \App\Models\Discount
      */
-    public function redeem(CustomerDiscountRedeemRequest $request) {
+    public function redeem(CustomerDiscountRedeemRequest $request)
+    {
         $input = $request->validated();
         $user = User::where('name', $input['shop'])->firstOrFail();
         $customer = $user->customers()->where('shopify_id', $input['logged_in_customer_id'])->firstOrFail();
@@ -65,6 +66,7 @@ class CustomerDiscountController extends Controller
             'customer_selection' => $discount_blueprint->customer_selection,
             'type' => $discount_blueprint->type,
             'amount' => $discount_blueprint->amount,
+            'description' => $discount_blueprint->description,
         ]);
 
         $customer->decrement('loyalty_point', $discount_blueprint->loyalty_price);

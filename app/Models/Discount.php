@@ -24,6 +24,7 @@ class Discount extends Model
         'discount_blueprint_id',
         'code',
         'amount',
+        'description',
         'type',
         'customer_selection',
         'starts_at',

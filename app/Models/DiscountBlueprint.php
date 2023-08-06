@@ -164,25 +164,27 @@ class DiscountBlueprint extends Model
     public function toShopify(Customer $customer)
     {
         return [
-            'appliesOncePerCustomer' => true,
-            'code' => $this->generateDiscountCode(),
-            'combinesWith' => [
-                'orderDiscounts' => false,
-                'productDiscounts' => false,
-                'shippingDiscounts' => false,
-            ],
-            'customerGets' => [
-                'appliesOnOneTimePurchase' => true,
-                'items' => [
-                    'all' => true,
+            'basicCodeDiscount' => [
+                'appliesOncePerCustomer' => true,
+                'code' => $this->generateDiscountCode(),
+                'combinesWith' => [
+                    'orderDiscounts' => false,
+                    'productDiscounts' => false,
+                    'shippingDiscounts' => false,
                 ],
-                'value' => $this->getDiscountValue(),
+                'customerGets' => [
+                    'appliesOnOneTimePurchase' => true,
+                    'items' => [
+                        'all' => true,
+                    ],
+                    'value' => $this->getDiscountValue(),
+                ],
+                'customerSelection' => $this->getCustomerSelections($customer),
+                'endsAt' => now()->addSeconds($this->time_limit)->toISOString(),
+                'startsAt' => now()->toISOString(),
+                'title' => $this->name,
+                'usageLimit' => 1,
             ],
-            'customerSelections' => $this->getCustomerSelections($customer),
-            'endsAt' => now()->addSeconds($this->time_limit)->toISOString(),
-            'startsAt' => now()->toISOString(),
-            'title' => $this->name,
-            'usageLimit' => 1,
         ];
     }
 

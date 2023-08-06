@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Enums\LoyaltyRuleApplicationType;
 use App\Enums\LoyaltyRuleStatus;
 use App\Models\User;
+use App\Models\Discount;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,6 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Osiset\ShopifyApp\Objects\Values\ShopDomain;
 use Osiset\ShopifyApp\Contracts\Queries\Shop as IShopQuery;
 use stdClass;
+use Carbon\Carbon;
 
 class OrdersUpdatedJob implements ShouldQueue
 {
@@ -61,7 +63,7 @@ class OrdersUpdatedJob implements ShouldQueue
         }
 
         $shopify_id = data_get($this->data, 'id');
-
+        $discount_applications = data_get($this->data, 'discount_applications', []);
         $order = $user->orders()->where('shopify_id', $shopify_id)->first();
 
         if ($order) {
@@ -85,6 +87,18 @@ class OrdersUpdatedJob implements ShouldQueue
                 'last_name' => data_get($customer_data, 'last_name'),
                 'phone' => data_get($customer_data, 'phone'),
             ]);
+        } else {
+            foreach ($discount_applications as $discount) {
+                $code = data_get($discount, 'code');
+                $customer_discount = Discount::where('code', $code)
+                    ->whereNull('used_at')
+                    ->first();
+                if ($customer_discount) {
+                    $customer_discount->update([
+                        'used_at' => new Carbon(data_get($this->data, 'processed_at')),
+                    ]);
+                }
+            }
         }
 
         $line_items_data = data_get($this->data, 'line_items');

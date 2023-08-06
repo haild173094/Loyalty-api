@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\DiscountApplicationType;
+use App\Enums\DiscountType;
+use App\Models\User;
+use App\Models\DiscountBlueprint;
+use App\Models\Customer;
 
 class Discount extends Model
 {
@@ -15,12 +20,15 @@ class Discount extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
+        'discount_blueprint_id',
         'code',
         'amount',
         'type',
         'customer_selection',
         'starts_at',
         'ends_at',
+        'used_at',
     ];
 
     /**

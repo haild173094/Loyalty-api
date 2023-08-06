@@ -131,6 +131,8 @@ class OrdersUpdatedJob implements ShouldQueue
     protected function getLoyaltyPointByLineItem(User $user, array $line_item)
     {
         $properties = data_get($line_item, 'properties');
+        $quantity = data_get($line_item, 'quantity', 1);
+
         foreach ($properties as $property) {
             if (data_get($property, 'name') == '_loyalObjectId') {
                 $loyaltyRule = $user->loyaltyRules()
@@ -143,7 +145,7 @@ class OrdersUpdatedJob implements ShouldQueue
                     return 0;
                 }
 
-                return $loyaltyRule->loyalty_point;
+                return $loyaltyRule->loyalty_point * $quantity;
             }
         }
         return 0;

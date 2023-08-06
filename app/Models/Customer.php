@@ -52,4 +52,27 @@ class Customer extends Model
     {
         return $this->hasMany(Discount::class);
     }
+
+    /**
+     * Scope for search
+     *
+     * @param \Illuminate\Database\Eloquent\Builder  $query
+     * @param array $input
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $input)
+    {
+        if (isset($input['query'])) {
+            $query->where(function ($query) use ($input) {
+                $query->where('first_name', 'ILIKE', "%{$input['query']}%")
+                    ->orWhere('last_name', 'ILIKE', "%{$input['query']}%")
+                    ->orWhere('email', 'ILIKE', "%{$input['query']}%")
+                    ->orWhere('phone', 'ILIKE', "%{$input['query']}%");
+            });
+        }
+
+        $query->orderBy($input['order_by'], $input['sort']);
+        return $query;
+    }
 }

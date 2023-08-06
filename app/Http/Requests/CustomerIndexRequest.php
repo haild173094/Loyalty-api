@@ -3,10 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
-class DiscountBlueprintIndexRequest extends FormRequest
+class CustomerIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,16 +26,12 @@ class DiscountBlueprintIndexRequest extends FormRequest
         return [
             'order_by' => [
                 'nullable',
-                Rule::in(['created_at', 'updated_at', 'id', 'name']),
+                Rule::in(['created_at', 'updated_at', 'id']),
             ],
             'query' => 'string|nullable',
             'sort' => [
                 'nullable',
                 Rule::in(['desc', 'asc']),
-            ],
-            'status' => [
-                'nullable',
-                new Enum(ProductStatus::class),
             ],
             'page' => 'string|nullable',
             'limit' => 'integer|nullable',
@@ -63,10 +59,6 @@ class DiscountBlueprintIndexRequest extends FormRequest
 
         if (!isset($input['page'])) {
             $input['page'] = null;
-        }
-
-        if (!isset($input['status'])) {
-            $input['status'] = null;
         }
 
         return data_get($input, $key, $default);

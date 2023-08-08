@@ -195,6 +195,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
     ],
@@ -214,4 +215,15 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    /**
+     * App custom config
+     */
+    'custom' => [
+        'metafield' => [
+            'namespace' => env('SHOPIFY_METAFIELD_NAMESPACE', 'oe_loyalty'),
+            'key' => env('SHOPIFY_METAFIELD_KEY', 'loyalty_data'),
+            'prize_namespace' => env('SHOPIFY_METAFIELD_PRIZE_NAMESPACE', 'oe_loyalty_prize'),
+            'rule_namespace' => env('SHOPIFY_METAFIELD_RULE_NAMESPACE', 'oe_loyalty_rule'),
+        ],
+    ],
 ];

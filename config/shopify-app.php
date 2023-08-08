@@ -350,7 +350,16 @@ return [
                 'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://some-app.com/webhook/purchase'),
             ]
             ...
-        */],
+        */
+        [
+            'topic' => env('SHOPIFY_APP_UNINSTALLED', 'APP_UNINSTALLED'),
+            'address' => env('SHOPIFY_WEBHOOK_PATH') . '/app-uninstalled',
+        ],
+        [
+            'topic' => env('SHOPIFY_ORDERS_UPDATED', 'ORDERS_UPDATED'),
+            'address' => env('SHOPIFY_WEBHOOK_PATH') . '/orders-updated',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Osiset\ShopifyApp\Traits\HomeController as HomeControllerTrait;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -19,7 +20,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-      \Log::info(json_encode(auth()->user()));
+      $user = User::where('name', $request->shop)->first();
       return View::make(
           'shopify-app::home.index',
           [
@@ -27,7 +28,7 @@ class HomeController extends Controller
               'query' => $request->query(),
               'host' => $request->host,
               'shop' => $request->shop,
-              'user' => auth()->user(),
+              'user' => $user,
           ],
       );
     }

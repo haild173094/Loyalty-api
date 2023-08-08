@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Exceptions\ShopifyGraphqlException;
+use App\Exceptions\ShopifyGraphqlUserError;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Osiset\ShopifyApp\Contracts\ShopModel as IShopModel;
 use Osiset\ShopifyApp\Traits\ShopModel;
+use Illuminate\Support\Arr;
+use App\Enums\ShopifyType;
 
 class User extends Authenticatable implements IShopModel
 {
@@ -57,24 +61,7 @@ class User extends Authenticatable implements IShopModel
         "plan_name",
         "has_discounts",
         "has_gift_cards",
-        "myshopify_domain",
-        "google_apps_domain",
-        "google_apps_login_enabled",
-        "money_in_emails_format",
-        "money_with_currency_in_emails_format",
-        "eligible_for_payments",
-        "requires_extra_payments_agreement",
-        "password_enabled",
-        "has_storefront",
-        "cookie_consent_level",
-        "visitor_tracking_consent_preference",
-        "checkout_api_supported",
-        "multi_location_enabled",
-        "setup_required",
-        "pre_launch_enabled",
-        "enabled_presentment_currencies",
-        "transactional_sms_disabled",
-        "marketing_sms_consent_enabled_at_checkout"
+        "myshopify_domain"
     ];
 
     /**
@@ -111,4 +98,111 @@ class User extends Authenticatable implements IShopModel
         'pre_launch_enabled' => 'boolean',
         'enabled_presentment_currencies' => 'array',
     ];
+
+    /**
+     * Products belongs to this user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Collections belongs to this user
+     */
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
+    }
+
+    /**
+     * Orders
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Customers
+     */
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    /**
+     * Discount blueprint
+     */
+    public function discountBlueprints()
+    {
+        return $this->hasMany(DiscountBlueprint::class);
+    }
+
+    /**
+     * Loyalty rules
+     */
+    public function loyaltyRules()
+    {
+        return $this->hasMany(LoyaltyRule::class);
+    }
+
+    /**
+     * Get product shopify graphql id
+     * @return string|null
+     */
+    public function getShopifyGraphqlId()
+    {
+        if (!$this->shop_id) {
+            return null;
+        }
+
+        return 'gid://shopify/' . ShopifyType::Shop->value . '/' . $this->shop_id;
+    }
+
+    /**
+     * Request graphql to Shopify
+     *
+     * @param $query
+     * @param array $variables
+     * @param int $tries
+     * @return array|\GuzzleHttp\Promise\Promise
+     * @throws ShopifyGraphqlException
+     */
+    public function graph($query, array $variables = [], $tries = 0)
+    {
+        $max_tries = config('shopify-app.graphql_max_tries', 3);
+        $response = $this->api()->graph($query, $variables);
+        $body = Arr::get($response, 'body');
+
+        $container = data_get($body, 'data.container');
+        $first_key = array_key_first((array) $container);
+        $user_errors = data_get($container, $first_key . '.userErrors');
+
+        if ($user_errors) {
+            throw new ShopifyGraphqlUserError($user_errors);
+        }
+
+        $errors = Arr::get($body, 'errors');
+
+        if ($errors) {
+            if (count($errors) === 1) {
+                $error_code = data_get($errors, '0.extensions.code');
+
+                if ($error_code === 'THROTTLED' && $tries < $max_tries) {
+                    sleep(1);
+
+                    return $this->graph($query, $variables, $tries + 1);
+                }
+            }
+
+            throw new ShopifyGraphqlException($errors);
+        }
+
+        return $response;
+    }
 }

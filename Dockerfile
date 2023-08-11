@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     $PHPIZE_DEPS \
     freetype-dev \
     openssl-dev \
+    libzip-dev \
     postgresql-dev
 
 RUN pecl install \

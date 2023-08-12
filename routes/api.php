@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CollectionController;
+use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\DiscountBlueprintController;
 use App\Http\Controllers\API\LoyaltyRuleController;
 use App\Http\Controllers\API\Merchant\CustomerController as MerchantCustomerController;
@@ -46,6 +47,10 @@ Route::namespace('API')->name('api.')->group(function () {
             Route::post('/', [DiscountBlueprintController::class, 'store'])->name('discount-blueprints.store');
             Route::put('{discount_blueprint}', [DiscountBlueprintController::class, 'update'])->name('discount-blueprints.update');
             Route::delete('{discount_blueprint}', [DiscountBlueprintController::class, 'destroy'])->name('discount-blueprints.delete');
+        });
+
+        Route::prefix('customers')->group(function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
         });
 
         Route::prefix('loyalty-rules')->group(function () {

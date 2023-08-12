@@ -152,6 +152,14 @@ class User extends Authenticatable implements IShopModel
     }
 
     /**
+     * Discounts
+     */
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+
+    /**
      * Get product shopify graphql id
      * @return string|null
      */

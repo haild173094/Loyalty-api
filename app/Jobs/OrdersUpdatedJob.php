@@ -2,10 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Enums\LoyaltyRuleApplicationType;
 use App\Enums\LoyaltyRuleStatus;
 use App\Models\User;
-use App\Models\Discount;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -90,7 +88,7 @@ class OrdersUpdatedJob implements ShouldQueue
         } else {
             foreach ($discount_applications as $discount) {
                 $code = data_get($discount, 'code');
-                $customer_discount = Discount::where('code', $code)
+                $customer_discount = $user->discounts()->where('code', $code)
                     ->whereNull('used_at')
                     ->first();
                 if ($customer_discount) {
